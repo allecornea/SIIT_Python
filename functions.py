@@ -174,8 +174,8 @@ print(greet("World"))
 
 
 def uppercase(func):
-    def wrapper():
-        original_result = func()
+    def wrapper(*args, **kwargs):
+        original_result = func(*args, **kwargs)
         modified_result = original_result.upper()
         return modified_result
     return wrapper
@@ -186,4 +186,69 @@ def greet(name):
     return "Greetings {}!".format(name)
 
 
-print(greet('World'))
+print(greet('Alexandra'))
+
+print('------------------------------------------------')
+
+# Create a decorator called safe_addition that will output a message if the operation cannot be performed correctly
+# [is unsafe] and return a correct result [check - floating point inaccuracies], otherwise it will return just the
+# result
+
+
+def safe_addition(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if str(result)[::-1].find('.') > 1:
+            return 'Please check the input numbers, there is a floating point inaccuracy!'
+        else:
+            return result
+    return wrapper
+
+
+@safe_addition
+def sum_of(first_number, second_number):
+    return first_number + second_number
+
+
+print(sum_of(1.1, 2.2))
+print(sum_of(1.1, 1.1))
+
+print('------------------------------------------------')
+
+
+# Create a decorator called register that will update a list called print_registry with all the
+# decorated functions names.
+
+
+print_registry = []
+
+
+def register(func):
+    print_registry.append(func.__name__)
+    return func
+
+
+@register
+def greet(name):
+    return "Greetings {}!".format(name)
+
+
+def say_hello(name):
+    return "Hello {}!".format(name)
+
+
+@register
+def say_goodbye(name):
+    return "Goodbye {}!".format(name)
+
+
+print(print_registry)
+
+
+
+
+
+
+
+
+
